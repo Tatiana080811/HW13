@@ -1,56 +1,55 @@
 package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductBasket {
-    private final Product[] products = new Product[5];
-    private int index = 0;
+    private List<Product> products;
+    private double totalCost;
+
+    public ProductBasket() {
+        products = new ArrayList<>();
+        totalCost = 0.0;
+    }
 
     public void addProduct(Product product) {
-        if (index >= products.length) {
-            System.out.println("Невозможно добавить продукт.");
-            return;
-        }
-        products[index++] = product;
+        products.add(product);
+        updateTotalCost();
     }
-    public boolean containsProductByName(String name) {
-        for (Product product : products) {
-            if (product != null && product.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+        updateTotalCost();
     }
 
     public void clearBasket() {
-        for (int i = 0; i < products.length; i++) {
-            products[i] = null;
-        }
-        index = 0;
+        products.clear();
+        totalCost = 0.0;
     }
-    public int totalCost() {
-        int cost = 0;
-        for (Product product : products) {
-            if (product != null) {
-                cost += product.getPrice();
-            }
-        }
-        return cost;
+
+    public double totalCost() {
+        return totalCost;
+    }
+
+    private void updateTotalCost() {
+        totalCost = products.stream().mapToDouble(Product::getPrice).sum();
+    }
+
+    public boolean containsProductByName(String name) {
+        return products.stream().anyMatch(p -> p.getName().equals(name));
     }
 
     public void printContents() {
-        boolean isEmpty = true;
+        long specialCount = products.stream().filter(Product::isSpecial).count();
         for (Product product : products) {
-            if (product != null) {
-                System.out.println(product.getName() + ": " + product.getPrice());
-                isEmpty = false;
-            }
+            System.out.println(product.toString());
         }
-        if (isEmpty) {
-            System.out.println("Корзина пуста.");
-        }
+        System.out.println("Итого: " + totalCost());
+        System.out.println("Специальных товаров: " + specialCount);
     }
 }
-
 
 
 
