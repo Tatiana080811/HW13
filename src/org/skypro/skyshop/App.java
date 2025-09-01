@@ -1,12 +1,24 @@
 package org.skypro.skyshop;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.DiscountedProduct;
 import org.skypro.skyshop.FixPriceProduct;
+import org.skypro.skyshop.basket.Searchable;
+import org.skypro.skyshop.basket.Article;
+import org.skypro.skyshop.basket.SearchEngine;
+
 
 public class App {
 
     public static void main(String[] args) {
+        List<Searchable> searchables = new ArrayList<>();
+        searchables.add(new Product("Яблоко", 50));
+        searchables.add(new Article("Яблоко", "Сезонное, зеленое, кислое"));
+
         ProductBasket basket = new ProductBasket();
 
         Product simpleProduct = new DiscountedProduct.SimpleProduct("Простой персик", 50.0);
@@ -64,3 +76,25 @@ public class App {
     }
 }
 
+    class TestSearchEngine {
+        public static void main(String[] args) {
+
+            Searchable product1 = new Product("Зеленый банан", 50);
+            Searchable product2 = new Product("Банан по уценке", 30);
+
+            SearchEngine engine = new SearchEngine(10);
+
+            engine.add(new Product("Яблоко", 50));
+            engine.add(new Article("Яблоко", "Сезонное, зеленое, кислое" ));
+            engine.add(new Product("Дыня", 130));
+            engine.add(new Article("Дыня", "Круглая, сладкая"));
+
+            Searchable[] results = engine.search("Яблоко");
+            for (Searchable res : results) {
+                if (res != null) {
+                    System.out.println(res.getStringRepresentation());
+
+                }
+            }
+        }
+    }
