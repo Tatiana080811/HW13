@@ -1,14 +1,11 @@
 package org.skypro.skyshop.basket;
 
 public interface Searchable {
-    String getSearchTerm();
-    void setGetSearchTerm(String searchTerm);
-    void performSearch();
-    String getContentType();
-    String getName();
+    String getSearchTerm();      // Термин для поиска
+    String getContentType();     // Тип содержимого (например, PRODUCT или ARTICLE)
+    String getName();            // Имя элемента
 
     default String getStringRepresentation() {
-        return this.getName() + " - " + this.getContentType();
+        return getName() + " - " + getContentType();
     }
-
 }

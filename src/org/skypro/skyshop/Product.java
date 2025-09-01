@@ -2,7 +2,7 @@ package org.skypro.skyshop.product;
 
 import org.skypro.skyshop.basket.Searchable;
 
-public abstract class Product implements Searchable {
+public class Product implements Searchable {
     protected final String name;
     private final double basePrice;
 
@@ -13,35 +13,33 @@ public abstract class Product implements Searchable {
 
     @Override
     public String getSearchTerm() {
-        return this.name;
+        return name;
     }
 
     @Override
-    public String getContentTYpe(){
-        return "PRODUCT";
-    }
-    @Override
-    public void performSearch(){
-        System.out.println("Выполнен поиск по товару: " + this.getSearchTerm());
+    public String getContentType() {
+        return "PRODUCT"; // Реализация отсутствующего метода
     }
 
     @Override
-    public String toString(){
-        return "Продукт: " + this.getName();
-    }
-
-
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Продукт: " + this.getName();
     }
 
     public double getBasePrice() {
         return basePrice;
     }
-    public abstract double getPrice();
 
-    public abstract boolean isSpecial();
+    public double getPrice() {
+        return basePrice;
+    }
 
-    @Override
-    public abstract String toString();
+    public boolean isSpecial() {
+        return false;
+    }
 }

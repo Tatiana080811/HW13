@@ -1,38 +1,27 @@
 package org.skypro.skyshop.basket;
 
 public class Article implements Searchable {
-    private String articleName;
-    private String articleTerm;
+    private  String name;
+    private  String content;
 
-    @Override
-    public String toString() {
-        return "Article{" +
-                "articleName='" + articleName + '\'' +
-                ", articleText='" + articleTerm + '\'' +
-                '}';
-
-
+    public Article(String name, String content) {
+        this.name = name;
+        this.content = content;
     }
     @Override
-    public String getSearch(){
-        return this.toString();
+    public String getSearchTerm() {
+        return name + " " + content;
     }
     @Override
-    public String getName(){
-        return this.articleName;
+    public String getContentType() {
+        return "ARTICLE";
     }
     @Override
-    public void performSearch(){
-        System.out.println("Выполнен поиск по статье: " + this.getSearchTerm());
+    public String getName() {
+        return name;
     }
     @Override
     public String toString() {
-        return this.articleName + ": " + this.articleTerm;
-
+        return "Статья: " + name + ". " + content;
     }
-    @Override
-    public String getStringRepresentation(){
-        return this.getName() + " - " + this.getContentType();
-    }
-
 }
