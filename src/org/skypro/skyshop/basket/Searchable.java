@@ -5,7 +5,7 @@ public interface Searchable {
     String getContentType();     // Тип содержимого (например, PRODUCT или ARTICLE)
     String getName();            // Имя элемента
 
-    default String getStringRepresentation() {
+    public default String getStringRepresentation() {
         return getName() + " - " + getContentType();
     }
 }
