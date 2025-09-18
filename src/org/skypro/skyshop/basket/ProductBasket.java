@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductBasket {
-    private List<Product> products;
-    private double totalCost;
+    public List<Product> products;
+    public double totalCost;
 
     public ProductBasket() {
         products = new ArrayList<>();
