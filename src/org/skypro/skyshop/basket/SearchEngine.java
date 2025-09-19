@@ -1,42 +1,42 @@
 package org.skypro.skyshop.basket;
 
+import org.skypro.skyshop.exceptions.BestResultNotFound;
 import org.skypro.skyshop.basket.Searchable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchEngine {
-    private Searchable[] elements;
-    private int size;
-
-    public SearchEngine(int capacity) {
-        if (capacity <= 0) {
-            throw new IllegalArgumentException("Размер корзины должен быть положительным значением.");
+    public static List<Searchable> findAllMatches(List<Searchable> searchables, String search) throws BestResultNotFound {
+        if (searchables == null || searchables.isEmpty() || search == null || search.isEmpty()) {
+            throw new BestResultNotFound("Исходные данные для поиска пусты.");
         }
-        this.elements = new Searchable[capacity];
-        this.size = 0;
-    }
-
-    // Метод добавления элемента в корзину
-    public boolean add(Searchable element) {
-        if (size < elements.length) {
-            elements[size++] = element;
-            return true;
-        }
-        return false;
-    }
-
-    // Метод поиска по элементам
-    public Searchable[] search(String query) {
-        List<Searchable> foundElements = new ArrayList<>();
-
-        for (int i = 0; i < size; i++) {
-            Searchable currentElement = elements[i];
-            if (currentElement.getSearchTerm().contains(query)) {
-                foundElements.add(currentElement);
-                if (foundElements.size() == 5) break;
+        List<Searchable> results = new ArrayList<>();
+        for (Searchable item : searchables) {
+            String term = item.getSearchTerm();
+            if (term.contains(search)) {
+                results.add(item);
             }
         }
 
-        return foundElements.toArray(new Searchable[0]);
+        if (results.isEmpty()) {
+            throw new BestResultNotFound("Не удалось найти ни одного результата для запроса: " + search);
+        }
+
+        return results;
+    }
+
+    // Методы вспомогательные остаются прежними
+    private static int countSubstrings(String text, String substring) {
+        int count = 0;
+        int pos = 0;
+
+        while ((pos = text.indexOf(substring, pos)) != -1) {
+            count++;
+            pos += substring.length();
+        }
+
+        return count;
     }
 }
+
+
