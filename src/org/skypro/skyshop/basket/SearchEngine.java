@@ -2,34 +2,30 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.exceptions.BestResultNotFound;
 import org.skypro.skyshop.basket.Searchable;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchEngine {
-    public static Searchable findBestMatch(List<Searchable> searchables, String search) throws BestResultNotFound {
+    public static List<Searchable> findAllMatches(List<Searchable> searchables, String search) throws BestResultNotFound {
         if (searchables == null || searchables.isEmpty() || search == null || search.isEmpty()) {
             throw new BestResultNotFound("Исходные данные для поиска пусты.");
         }
-
-        Searchable bestMatch = null;
-        int maxCount = -1;
-
+        List<Searchable> results = new ArrayList<>();
         for (Searchable item : searchables) {
             String term = item.getSearchTerm();
-            int count = countSubstrings(term, search);
-            if (count > maxCount) {
-                maxCount = count;
-                bestMatch = item;
+            if (term.contains(search)) {
+                results.add(item);
             }
         }
 
-        if (bestMatch == null) {
-            throw new BestResultNotFound("Не удалось найти лучший результат для запроса: " + search);
+        if (results.isEmpty()) {
+            throw new BestResultNotFound("Не удалось найти ни одного результата для запроса: " + search);
         }
 
-        return bestMatch;
+        return results;
     }
 
+    // Методы вспомогательные остаются прежними
     private static int countSubstrings(String text, String substring) {
         int count = 0;
         int pos = 0;
@@ -42,3 +38,5 @@ public class SearchEngine {
         return count;
     }
 }
+
+
