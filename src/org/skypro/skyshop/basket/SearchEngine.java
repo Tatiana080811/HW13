@@ -1,7 +1,5 @@
 package org.skypro.skyshop.basket;
 import org.skypro.skyshop.exceptions.BestResultNotFound;
-import org.skypro.skyshop.basket.Searchable;
-import org.skypro.skyshop.basket.ArticleComparator;
 
 import java.util.*;
 
