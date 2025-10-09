@@ -1,50 +1,41 @@
 package org.skypro.skyshop.basket;
 import org.skypro.skyshop.exceptions.BestResultNotFound;
 import org.skypro.skyshop.basket.Searchable;
+import org.skypro.skyshop.basket.ArticleComparator;
 
 import java.util.*;
 
 public class SearchEngine {
-    private static Comparator<Searchable> articleComparator = new Comparator<>() {
+    private static final Comparator<Searchable> ARTICLE_COMPARATOR = new Comparator<Searchable>() {
         @Override
         public int compare(Searchable s1, Searchable s2) {
             int lenCompare = Integer.compare(s1.getName().length(), s2.getName().length());
-
             if (lenCompare != 0) {
-                return -lenCompare;
+                return -lenCompare; // длиннее идет первым
             }
-
-            return s1.getName().compareTo(s2.getName());
+            return s1.getName().compareTo(s2.getName()); // сортировка по имени
         }
     };
-    public static Set<Searchable> findAllMatches(Set<Searchable> searchables, String search) throws BestResultNotFound {
-        if (searchables == null || searchables.isEmpty() || search == null || search.isEmpty()) {
-            throw new BestResultNotFound("Исходные данные для поиска пусты.");
-        }
-        Set<Searchable> results = new TreeSet<>(articleComparator);
 
+    public static Searchable findBestMatch(List<Searchable> searchables, String search) throws BestResultNotFound {
+        if (searchables == null || searchables.isEmpty() || search == null || search.isEmpty()) {
+            throw new BestResultNotFound("Источник данных для поиска пуст.");
+        }
+        List<Searchable> matches = new ArrayList<>();
         for (Searchable item : searchables) {
-            String term = item.getSearchTerm();
-            if (term.contains(search)) {
-                results.add(item);
+            if (item.getSearchTerm().contains(search)) {
+                matches.add(item);
             }
         }
-
-        if (results.isEmpty()) {
+        if (matches.isEmpty()) {
             throw new BestResultNotFound("Не удалось найти ни одного результата для запроса: " + search);
         }
-
-        return results;
-    }
-    private static int countSubstrings(String text, String substring) {
-        int count = 0;
-        int pos = 0;
-
-        while ((pos = text.indexOf(substring, pos)) != -1) {
-            count++;
-            pos += substring.length();
-        }
-
-        return count;
+        matches.sort(ARTICLE_COMPARATOR);
+        return matches.get(0);
     }
 }
+
+
+
+
+

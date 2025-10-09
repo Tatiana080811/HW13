@@ -26,7 +26,7 @@ public class App {
             System.out.println("Ошибка поиска: " + e.getMessage());
         }
         try {
-            String searchQueryError = "Ананас";
+            String searchQueryError = "Яблоко";
             Searchable bestMatch = SearchEngine.findBestMatch(searchables, searchQueryError);
             System.out.println("Найден лучший результат: " + bestMatch.getSearchTerm());
         } catch (BestResultNotFound e) {
@@ -39,9 +39,9 @@ public class App {
         Product fixedPriceProduct = new FixPriceProduct("Персик с фиксированной ценой");
 
         DiscountedProduct.SimpleProduct apple = new DiscountedProduct.SimpleProduct("Яблоко", 50, -20);
-        DiscountedProduct.SimpleProduct banana = new DiscountedProduct.SimpleProduct("  ", 70, 80);
+        DiscountedProduct.SimpleProduct banana = new DiscountedProduct.SimpleProduct("Киви", 70, 80);
         DiscountedProduct.SimpleProduct orange = new DiscountedProduct.SimpleProduct("Апельсин", 80, 5);
-        DiscountedProduct.SimpleProduct grapefruit = new DiscountedProduct.SimpleProduct("Грейпфрут", 0, 90);
+        DiscountedProduct.SimpleProduct grapefruit = new DiscountedProduct.SimpleProduct("Грейпфрут", 100, 90);
         DiscountedProduct.SimpleProduct kiwi = new DiscountedProduct.SimpleProduct("Киви", 60, 15);
         DiscountedProduct.SimpleProduct melon = new DiscountedProduct.SimpleProduct("Дыня", 150, -20);
 
