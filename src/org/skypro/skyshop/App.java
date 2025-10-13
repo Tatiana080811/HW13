@@ -1,8 +1,6 @@
 package org.skypro.skyshop;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.basket.SearchEngine;
 import org.skypro.skyshop.product.Product;
@@ -12,7 +10,6 @@ import org.skypro.skyshop.exceptions.BestResultNotFound;
 
 public class App {
     public static void main(String[] args) {
-        // Создаем список поисковых объектов
         List<Searchable> searchables = new ArrayList<>();
         searchables.add(new Product("Яблоко", 50));
         searchables.add(new Article("Яблоко", "Сезонное, зеленое, кислое"));
