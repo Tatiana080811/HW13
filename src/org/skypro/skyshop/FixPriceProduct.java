@@ -1,11 +1,11 @@
 package org.skypro.skyshop;
 
-import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.service.model.search.product.Product;
 
 public class FixPriceProduct extends Product {
     private static final double FIXED_PRICE = 100.0;
 
-    public FixPriceProduct(String name) {
+    public FixPriceProduct(String name, double v) {
         super(name, FIXED_PRICE);
     }
 

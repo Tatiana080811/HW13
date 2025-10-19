@@ -1,13 +1,23 @@
-package org.skypro.skyshop.basket;
+package org.skypro.skyshop.service.model.search.product.article;
+import org.skypro.skyshop.service.model.search.Searchable;
+
 import java.util.Objects;
+import java.util.UUID;
 
 public class Article implements Searchable {
     private  String name;
     private  String content;
+    private final UUID id;
 
     public Article(String name, String content) {
         this.name = name;
         this.content = content;
+        this.id = UUID.randomUUID();
+    }
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 
     @Override
@@ -21,11 +31,11 @@ public class Article implements Searchable {
     public int hashCode() {
         return Objects.hash(name);
     }
-    @Override
+    @JsonIgnore
     public String getSearchTerm() {
         return name + " " + content;
     }
-    @Override
+    @JsonIgnore
     public String getContentType() {
         return "ARTICLE";
     }
