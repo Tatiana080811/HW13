@@ -1,58 +1,81 @@
 package org.skypro.skyshop.basket;
-
 import org.skypro.skyshop.product.Product;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Collection;
 
 public class ProductBasket {
-    private List<Product> products;
+    private final Map<String, List<Product>> productMap = new HashMap<>();
     private double totalCost;
 
-    public ProductBasket() {
-        products = new ArrayList<>();
-        totalCost = 0.0;
-    }
+    public ProductBasket() {}
 
     public void addProduct(Product product) {
-        products.add(product);
+        String productName = product.getName();
+        productMap.computeIfAbsent(productName, k -> new ArrayList<>()).add(product);
         updateTotalCost();
     }
 
     public void removeProduct(Product product) {
-        products.remove(product);
-        updateTotalCost();
+        String productName = product.getName();
+        List<Product> productsWithSameName = productMap.get(productName);
+        if (productsWithSameName != null && productsWithSameName.contains(product)) {
+            productsWithSameName.remove(product);
+            if (productsWithSameName.isEmpty()) {
+                productMap.remove(productName);
+            }
+            updateTotalCost();
+        }
     }
 
     public void clearBasket() {
-        products.clear();
+        productMap.clear();
         totalCost = 0.0;
     }
 
     public double totalCost() {
-        return totalCost;
+        return productMap.values().stream()
+                .flatMap(Collection::stream)
+                .mapToDouble(Product::getPrice)
+                .sum();
     }
 
     private void updateTotalCost() {
-        totalCost = products.stream().mapToDouble(Product::getPrice).sum();
+        totalCost = productMap.values().stream()
+                .flatMap(List::stream)
+                .mapToDouble(Product::getPrice)
+                .sum();
     }
 
     public boolean containsProductByName(String name) {
-        return products.stream().anyMatch(p -> p.getName().equals(name));
+        return productMap.containsKey(name);
     }
 
     public void printContents() {
-        long specialCount = products.stream().filter(Product::isSpecial).count();
-        for (Product product : products) {
-            System.out.println(product.toString());
-        }
+        long specialCount = countSpecialProducts();
+
+        productMap.forEach((name, products) -> {
+            System.out.println("Продукт: " + name);
+            products.forEach(System.out::println);
+        });
+
         System.out.println("Итого: " + totalCost());
         System.out.println("Специальных товаров: " + specialCount);
     }
+    private long countSpecialProducts() {
+        return productMap.values().stream()
+                .flatMap(List::stream)
+                .filter(Product::isSpecial)
+                .count();
+    }
+
+    public List<Product> removeAllProductsByName(String name) {
+        List<Product> removedProducts = productMap.remove(name);
+        if (removedProducts != null) {
+            updateTotalCost();
+        }
+        return removedProducts != null ? removedProducts : new ArrayList<>();
+    }
 }
-
-
-
-
-
-

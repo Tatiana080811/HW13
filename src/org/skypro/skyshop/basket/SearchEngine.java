@@ -1,42 +1,40 @@
 package org.skypro.skyshop.basket;
+import org.skypro.skyshop.exceptions.BestResultNotFound;
 
-import org.skypro.skyshop.basket.Searchable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SearchEngine {
-    private Searchable[] elements;
-    private int size;
-
-    public SearchEngine(int capacity) {
-        if (capacity <= 0) {
-            throw new IllegalArgumentException("Размер корзины должен быть положительным значением.");
-        }
-        this.elements = new Searchable[capacity];
-        this.size = 0;
-    }
-
-    // Метод добавления элемента в корзину
-    public boolean add(Searchable element) {
-        if (size < elements.length) {
-            elements[size++] = element;
-            return true;
-        }
-        return false;
-    }
-
-    // Метод поиска по элементам
-    public Searchable[] search(String query) {
-        List<Searchable> foundElements = new ArrayList<>();
-
-        for (int i = 0; i < size; i++) {
-            Searchable currentElement = elements[i];
-            if (currentElement.getSearchTerm().contains(query)) {
-                foundElements.add(currentElement);
-                if (foundElements.size() == 5) break;
+    private static final Comparator<Searchable> ARTICLE_COMPARATOR = new Comparator<Searchable>() {
+        @Override
+        public int compare(Searchable s1, Searchable s2) {
+            int lenCompare = Integer.compare(s1.getName().length(), s2.getName().length());
+            if (lenCompare != 0) {
+                return -lenCompare;
             }
+            return s1.getName().compareTo(s2.getName());
+        }
+    };
+
+    public static Searchable findBestMatch(List<Searchable> searchables, String search) throws BestResultNotFound {
+        if (searchables == null || searchables.isEmpty() || search == null || search.isEmpty()) {
+            throw new BestResultNotFound("Источник данных для поиска пуст.");
+        }
+        Set<Searchable> matchingResults = searchables.stream()
+                .filter(item -> item.getSearchTerm().contains(search))
+                .collect(Collectors.toCollection(() -> new TreeSet<>(ARTICLE_COMPARATOR)));
+
+        if (matchingResults.isEmpty()) {
+            throw new BestResultNotFound("Не удалось найти ни одного результата для запроса: " + search);
         }
 
-        return foundElements.toArray(new Searchable[0]);
+        return matchingResults.iterator().next();
     }
 }
+
+
+
+
+
+
+

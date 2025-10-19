@@ -1,36 +1,46 @@
 package org.skypro.skyshop;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.basket.SearchEngine;
 import org.skypro.skyshop.product.Product;
-import org.skypro.skyshop.DiscountedProduct;
-import org.skypro.skyshop.FixPriceProduct;
 import org.skypro.skyshop.basket.Searchable;
 import org.skypro.skyshop.basket.Article;
-import org.skypro.skyshop.basket.SearchEngine;
-
+import org.skypro.skyshop.exceptions.BestResultNotFound;
 
 public class App {
-
     public static void main(String[] args) {
         List<Searchable> searchables = new ArrayList<>();
         searchables.add(new Product("Яблоко", 50));
         searchables.add(new Article("Яблоко", "Сезонное, зеленое, кислое"));
 
+
+        try {
+            String searchQuery = "Яблоко";
+            Searchable bestMatch = SearchEngine.findBestMatch(searchables, searchQuery);
+            System.out.println("Самый подходящий объект: " + bestMatch.getSearchTerm());
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка поиска: " + e.getMessage());
+        }
+        try {
+            String searchQueryError = "Яблоко";
+            Searchable bestMatch = SearchEngine.findBestMatch(searchables, searchQueryError);
+            System.out.println("Найден лучший результат: " + bestMatch.getSearchTerm());
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка поиска: " + e.getMessage());
+        }
         ProductBasket basket = new ProductBasket();
 
-        Product simpleProduct = new DiscountedProduct.SimpleProduct("Простой персик", 50.0);
-        Product discountedProduct = new DiscountedProduct("Персик со скидкой", 100.0, 20); // скидка 20%
+        Product simpleProduct = new DiscountedProduct.SimpleProduct("Простой персик", 50.0, 40);
+        Product discountedProduct = new DiscountedProduct("Персик со скидкой", 100.0, 10);
         Product fixedPriceProduct = new FixPriceProduct("Персик с фиксированной ценой");
 
-        DiscountedProduct.SimpleProduct apple = new DiscountedProduct.SimpleProduct("Яблоко", 50);
-        DiscountedProduct.SimpleProduct banana = new DiscountedProduct.SimpleProduct("Банан", 70);
-        DiscountedProduct.SimpleProduct orange = new DiscountedProduct.SimpleProduct("Апельсин", 80);
-        DiscountedProduct.SimpleProduct grapefruit = new DiscountedProduct.SimpleProduct("Грейпфрут", 100);
-        DiscountedProduct.SimpleProduct kiwi = new DiscountedProduct.SimpleProduct("Киви", 60);
-        DiscountedProduct.SimpleProduct melon = new DiscountedProduct.SimpleProduct("Дыня", 150);
+        DiscountedProduct.SimpleProduct apple = new DiscountedProduct.SimpleProduct("Яблоко", 50, -20);
+        DiscountedProduct.SimpleProduct banana = new DiscountedProduct.SimpleProduct("Киви", 70, 80);
+        DiscountedProduct.SimpleProduct orange = new DiscountedProduct.SimpleProduct("Апельсин", 80, 5);
+        DiscountedProduct.SimpleProduct grapefruit = new DiscountedProduct.SimpleProduct("Грейпфрут", 100, 90);
+        DiscountedProduct.SimpleProduct kiwi = new DiscountedProduct.SimpleProduct("Киви", 60, 15);
+        DiscountedProduct.SimpleProduct melon = new DiscountedProduct.SimpleProduct("Дыня", 150, -20);
 
         basket.addProduct(apple);
         basket.addProduct(banana);
@@ -47,7 +57,6 @@ public class App {
         System.out.println("Есть ли Банан в корзине? " + basket.containsProductByName("Банан"));
         System.out.println("Есть ли Дыня в корзине? " + basket.containsProductByName("Дыня"));
         basket.clearBasket();
-
 
         System.out.println("Корзина после очистки:");
         basket.printContents();
@@ -75,26 +84,3 @@ public class App {
         System.out.println("Является ли товар с фиксированной ценой специальным: " + fixedPriceProduct.isSpecial());
     }
 }
-
-    class TestSearchEngine {
-        public static void main(String[] args) {
-
-            Searchable product1 = new Product("Зеленый банан", 50);
-            Searchable product2 = new Product("Банан по уценке", 30);
-
-            SearchEngine engine = new SearchEngine(10);
-
-            engine.add(new Product("Яблоко", 50));
-            engine.add(new Article("Яблоко", "Сезонное, зеленое, кислое" ));
-            engine.add(new Product("Дыня", 130));
-            engine.add(new Article("Дыня", "Круглая, сладкая"));
-
-            Searchable[] results = engine.search("Яблоко");
-            for (Searchable res : results) {
-                if (res != null) {
-                    System.out.println(res.getStringRepresentation());
-
-                }
-            }
-        }
-    }
