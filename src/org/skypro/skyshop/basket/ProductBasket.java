@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
 
 public class ProductBasket {
     private final Map<String, List<Product>> productMap = new HashMap<>();
@@ -35,7 +36,10 @@ public class ProductBasket {
     }
 
     public double totalCost() {
-        return totalCost;
+        return productMap.values().stream()
+                .flatMap(Collection::stream)
+                .mapToDouble(Product::getPrice)
+                .sum();
     }
 
     private void updateTotalCost() {
@@ -54,13 +58,12 @@ public class ProductBasket {
 
         productMap.forEach((name, products) -> {
             System.out.println("Продукт: " + name);
-            products.forEach(product -> System.out.println("\t" + product));
+            products.forEach(System.out::println);
         });
 
         System.out.println("Итого: " + totalCost());
         System.out.println("Специальных товаров: " + specialCount);
     }
-
     private long countSpecialProducts() {
         return productMap.values().stream()
                 .flatMap(List::stream)
