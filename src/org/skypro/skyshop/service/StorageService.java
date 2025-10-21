@@ -1,9 +1,9 @@
 package org.skypro.skyshop.service;
 import org.springframework.stereotype.Service;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.Collection;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.*;
+
 import org.skypro.skyshop.service.model.search.product.Product;
 import org.skypro.skyshop.service.model.search.product.article.Article;
 import org.skypro.skyshop.service.model.search.Searchable;
@@ -20,11 +20,11 @@ public class StorageService {
     }
 
     public Collection<Product> getAllProducts() {
-        return products.values();
+        return Collections.unmodifiableCollection(products.values());
     }
 
     public Collection<Article> getAllArticles() {
-        return articles.values();
+        return Collections.unmodifiableCollection(articles.values());
     }
 
         public Collection<Searchable> getAllSearchables () {
@@ -34,17 +34,17 @@ public class StorageService {
             return result;
         }
         private void initializeTestData () {
-            Product product1 = new Product("Яблоко", 50.0);
-            Product product2 = new Product("Простой персик", 100.0);
-            Product product3 = new Product("Киви", 150.0);
+            Product product1 = new Product(UUID.randomUUID(), "Яблоко", 50.0);
+            Product product2 = new Product(UUID.randomUUID(), "Простой персик", 100.0);
+            Product product3 = new Product(UUID.randomUUID(), "Киви", 150.0);
 
             products.put(product1.getId(), product1);
             products.put(product2.getId(), product2);
             products.put(product3.getId(), product3);
 
-            Article article1 = new Article("Яблоко", "Описание яблока");
-            Article article2 = new Article("Персик", "Описание перскиа");
-            Article article3 = new Article("Киви", "Описание киви");
+            Article article1 = new Article(UUID.randomUUID(), "Яблоко", "Описание яблока");
+            Article article2 = new Article(UUID.randomUUID(), "Персик", "Описание персика");
+            Article article3 = new Article(UUID.randomUUID(), "Киви", "Описание киви");
 
             articles.put(article1.getId(), article1);
             articles.put(article2.getId(), article2);

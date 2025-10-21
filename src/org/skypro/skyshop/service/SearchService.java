@@ -17,7 +17,8 @@ public class SearchService {
     }
 
     public List<SearchResult> search(String pattern) {
-        return storageService.getAllSearchables().stream()
+        List<Searchable> searchables = storageService.getAllSearchables();
+        return searchables.stream()
                 .filter(s -> s.getName().contains(pattern))
                 .map(SearchResult::fromSearchable)
                 .collect(Collectors.toList());
