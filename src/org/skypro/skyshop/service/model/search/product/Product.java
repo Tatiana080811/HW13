@@ -1,11 +1,12 @@
-package org.skypro.skyshop.product;
+package org.skypro.skyshop.service.model.search.product;
 import java.util.Objects;
-
-import org.skypro.skyshop.basket.Searchable;
+import org.skypro.skyshop.service.model.search.Searchable;
+import java.util.UUID;
 
 public class Product implements Searchable {
     protected final String name;
     private final double basePrice;
+    protected final UUID id;
 
     public Product(String name, double basePrice) {
         if (basePrice <= 0) {
@@ -16,24 +17,26 @@ public class Product implements Searchable {
         }
         this.name = name;
         this.basePrice = basePrice;
+        this.id = UUID.randomUUID();
     }
 
     @Override
+    public UUID getId(){
+        return id;
+    }
+    @JsonIgnore
     public String getSearchTerm() {
         return name;
     }
 
-    @Override
+    @JsonIgnore
     public String getContentType() {
         return "PRODUCT";
     }
-
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public String toString() {
         return "Продукт: " + this.getName();
     }
@@ -50,7 +53,6 @@ public class Product implements Searchable {
         return false;
     }
 
-    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Product)) return false;
@@ -58,7 +60,6 @@ public class Product implements Searchable {
         return Objects.equals(this.name, other.name);
     }
 
-    @Override
     public int hashCode() {
         return Objects.hash(name);
     }

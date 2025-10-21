@@ -50,22 +50,22 @@ public class ProductBasket {
     }
 
     public void printContents() {
-        int specialCount = (int)productMap.values().stream()
+        long specialCount = countSpecialProducts();
+
+        productMap.forEach((name, products) -> {
+            System.out.println("Продукт: " + name);
+            products.forEach(product -> System.out.println("\t" + product));
+        });
+
+        System.out.println("Итого: " + totalCost());
+        System.out.println("Специальных товаров: " + specialCount);
+    }
+
+    private long countSpecialProducts() {
+        return productMap.values().stream()
                 .flatMap(List::stream)
                 .filter(Product::isSpecial)
                 .count();
-
-        for (Map.Entry<String, List<Product>> entry : productMap.entrySet()) {
-            String productName = entry.getKey();
-            List<Product> products = entry.getValue();
-
-            System.out.println("Продукт: " + productName);
-            for (Product product : products) {
-                System.out.println("\t" + product.toString());
-            }
-        }
-        System.out.println("Итого: " + totalCost());
-        System.out.println("Специальных товаров: " + specialCount);
     }
 
     public List<Product> removeAllProductsByName(String name) {
