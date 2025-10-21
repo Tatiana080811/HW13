@@ -1,5 +1,6 @@
 package org.skypro.skyshop.basket;
 import org.skypro.skyshop.exceptions.BestResultNotFound;
+import org.skypro.skyshop.service.model.search.Searchable;
 
 import java.util.*;
 import java.util.stream.Collectors;
